@@ -1,1 +1,2 @@
-dolphin weex sample
+dolphin weex sample dolphin:wq
+
