@@ -1,11 +1,11 @@
 export const PRODUCT_LIST = [
-  {
-    type: 'interface',
-    name: '接口',
-    status: 'ready',
-    desc: 'weex app接口示例',
-    img: 'setting.png'
-  },
+  // {
+  //   type: 'interface',
+  //   name: '接口',
+  //   status: 'ready',
+  //   desc: 'weex app接口示例',
+  //   img: 'setting.png'
+  // },
   {
     type: '0x01',
     name: '热水器',
