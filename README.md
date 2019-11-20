@@ -1,4 +1,4 @@
-#weex-template
+#weex-sample
 
 > Weex
 
