@@ -8,7 +8,6 @@
     @dofTabPageCurrentTabSelected="dofTabPageCurrentTabSelected"
   >
     <div class="slot">
-      <text>haha</text>
       <list
         v-for="(v, index) in tabList"
         :key="index"
