@@ -1,11 +1,27 @@
+export const SETTING_LIST = [
+  {
+    type: 'interface',
+    name: '基础库',
+    status: 'ready',
+    desc: 'dolphinWeex',
+    img: 'dolphin.png'
+  },
+  {
+    type: '0x01',
+    name: '插件库',
+    status: 'ready',
+    desc: 'weex 插件模版',
+    img: 'setting.png'
+  }
+]
 export const PRODUCT_LIST = [
-  // {
-  //   type: 'interface',
-  //   name: '接口',
-  //   status: 'ready',
-  //   desc: 'weex app接口示例',
-  //   img: 'setting.png'
-  // },
+  {
+    type: 'interface',
+    name: '基础库',
+    status: 'ready',
+    desc: 'dolphinWeex',
+    img: 'setting.png'
+  },
   {
     type: '0x01',
     name: '热水器',

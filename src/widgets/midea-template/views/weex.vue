@@ -14,15 +14,15 @@
         </div>
       </cell>
 
-      <cell v-for="(product, index) in products" :key="index">
-        <div class="card_wrapper" v-if="product.status === 'ready'">
+      <cell v-for="(setting, index) in settings" :key="index">
+        <div class="card_wrapper" v-if="setting.status === 'ready'">
           <div class="card_content">
-            <div class="left-container"><image class="left-img" :src="imgUrlCalc(product)" /></div>
+            <div class="left-container"><image class="left-img" :src="imgUrlCalc(setting)" /></div>
             <div class="right-container">
-              <text>{{ product.name }}</text>
-              <text>{{ product.desc }}</text>
+              <text>{{ setting.name }}</text>
+              <text>{{ setting.desc }}</text>
             </div>
-            <div class="right-icon-container" @click="itemClickHandler(product)">
+            <div class="right-icon-container" @click="itemClickHandler(setting)">
               <image class="right-icon" src="./assets/image/more.png" />
             </div>
           </div>
@@ -56,7 +56,126 @@
   </div>
 </template>
 
-<style>
+<script>
+import { DofMinibar } from 'dolphin-weex-ui'
+import Binding from 'weex-bindingx'
+import base from 'src/mixins/base'
+import nativeService from 'src/service/nativeService'
+import { SETTING_LIST, PRODUCT_LIST } from '../config/config'
+module.exports = {
+  components: {
+    DofMinibar
+  },
+  mixins: [base],
+  data() {
+    return {
+      leftButton: './assets/image/header/public_ic_back@2x.png',
+      rightButton: './assets/image/header/smart_ic_more_black@2x.png',
+      deviceTitle: 'Plugin template',
+      deviceName: '',
+      fake_tabs: ['Tab1', 'Tab2', 'Tab3', 'Tab4', 'Tab5', 'Tab6'],
+      settings: [],
+      products: [],
+      refreshing: false,
+      headerStyle: {
+        fontFamily: 'PingFangSC-Regular',
+        fontWeight: '900',
+        fontSize: '28px',
+        letterSpacing: 0
+      }
+    }
+  },
+  created() {
+    this.settings.splice(0)
+    this.products.splice(0)
+    this.settings.push(...SETTING_LIST)
+    this.products.push(...PRODUCT_LIST)
+  },
+  mounted() {
+    let self = this
+    let list = this.getEl(self.$refs.list)
+    let title_img_wrapper = this.getEl(self.$refs.title_img_wrapper)
+    let title_img = this.getEl(self.$refs.title_img)
+    let props = []
+    if (!this.isIos) {
+      let title_img_wrapper1 = this.getEl(self.$refs.title_img_wrapper1)
+      let title_img1 = this.getEl(self.$refs.title_img1)
+      props = [
+        {
+          element: title_img_wrapper1,
+          property: 'transform.scale',
+          expression: '(y>0)?0:((400-y)/400)'
+        },
+        {
+          element: title_img1,
+          property: 'transform.scale',
+          expression: '(y>0)?0:((400-y)/400)'
+        },
+        {
+          element: title_img1,
+          property: 'transform.translateY',
+          expression: 'y>0?y:0'
+        }
+      ]
+    }
+
+    Binding.bind(
+      {
+        eventType: 'scroll',
+        anchor: list,
+        props: [
+          {
+            element: title_img,
+            property: 'transform.scale',
+            expression: '(y>0)?1:((500-y)/500)'
+          },
+          {
+            element: title_img,
+            property: 'transform.translateY',
+            expression: 'y>0?0:y'
+          },
+
+          ...props
+        ]
+      },
+      function(e) {}
+    )
+  },
+  computed: {},
+  methods: {
+    minibarRightButtonClick() {
+      this.reload()
+    },
+    itemClickHandler({ type, status }) {
+      if (status === 'ready') {
+        if (type === 'interface') {
+          nativeService.goTo(`${type}.js`)
+        } else {
+          nativeService.goTo(`T${type}.js`)
+        }
+      } else {
+        nativeService.toast(type)
+      }
+    },
+    getEl: function(e) {
+      return e.ref
+    },
+    onrefresh(event) {
+      this.refreshing = true
+      setTimeout(() => {
+        this.refreshing = false
+      }, 100)
+    },
+    imgUrlCalc(product) {
+      if (product.type === 'interface') {
+        return `./assets/image/${product.img}`
+      }
+      return `./assets/image/smart/${product.img}`
+    }
+  }
+}
+</script>
+<style scoped>
 .app {
   flex: 1;
   justify-content: center;
@@ -190,120 +309,3 @@
   color: #ffffff;
 }
 </style>
-
-<script>
-import { DofMinibar } from 'dolphin-weex-ui'
-import Binding from 'weex-bindingx'
-import base from 'src/mixins/base'
-import nativeService from 'src/service/nativeService'
-import { PRODUCT_LIST } from '../config/config'
-module.exports = {
-  components: {
-    DofMinibar
-  },
-  mixins: [base],
-  data() {
-    return {
-      leftButton: './assets/image/header/public_ic_back@2x.png',
-      rightButton: './assets/image/header/smart_ic_more_black@2x.png',
-      deviceTitle: 'Plugin template',
-      deviceName: '',
-      fake_tabs: ['Tab1', 'Tab2', 'Tab3', 'Tab4', 'Tab5', 'Tab6'],
-      products: [],
-      refreshing: false,
-      headerStyle: {
-        fontFamily: 'PingFangSC-Regular',
-        fontWeight: '900',
-        fontSize: '28px',
-        letterSpacing: 0
-      }
-    }
-  },
-  created() {
-    this.products.splice(0)
-    this.products.push(...PRODUCT_LIST)
-  },
-  mounted() {
-    let self = this
-    let list = this.getEl(self.$refs.list)
-    let title_img_wrapper = this.getEl(self.$refs.title_img_wrapper)
-    let title_img = this.getEl(self.$refs.title_img)
-    let props = []
-    if (!this.isIos) {
-      let title_img_wrapper1 = this.getEl(self.$refs.title_img_wrapper1)
-      let title_img1 = this.getEl(self.$refs.title_img1)
-      props = [
-        {
-          element: title_img_wrapper1,
-          property: 'transform.scale',
-          expression: '(y>0)?0:((400-y)/400)'
-        },
-        {
-          element: title_img1,
-          property: 'transform.scale',
-          expression: '(y>0)?0:((400-y)/400)'
-        },
-        {
-          element: title_img1,
-          property: 'transform.translateY',
-          expression: 'y>0?y:0'
-        }
-      ]
-    }
-
-    Binding.bind(
-      {
-        eventType: 'scroll',
-        anchor: list,
-        props: [
-          {
-            element: title_img,
-            property: 'transform.scale',
-            expression: '(y>0)?1:((500-y)/500)'
-          },
-          {
-            element: title_img,
-            property: 'transform.translateY',
-            expression: 'y>0?0:y'
-          },
-
-          ...props
-        ]
-      },
-      function(e) {}
-    )
-  },
-  computed: {},
-  methods: {
-    minibarRightButtonClick() {
-      this.reload()
-    },
-    itemClickHandler({ type, status }) {
-      if (status === 'ready') {
-        if (type === 'interface') {
-          nativeService.goTo(`${type}.js`)
-        } else {
-          nativeService.goTo(`T${type}.js`)
-        }
-      } else {
-        nativeService.toast(type)
-      }
-    },
-    getEl: function(e) {
-      return e.ref
-    },
-    onrefresh(event) {
-      this.refreshing = true
-      setTimeout(() => {
-        this.refreshing = false
-      }, 100)
-    },
-    imgUrlCalc(product) {
-      if (product.type === 'interface') {
-        return `./assets/image/${product.img}`
-      }
-      return `./assets/image/smart/${product.img}`
-    }
-  }
-}
-</script>

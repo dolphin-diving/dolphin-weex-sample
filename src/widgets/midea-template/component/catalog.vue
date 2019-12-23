@@ -1,6 +1,6 @@
 <template>
-  <div class="catalog">
-    <text class="text">{{ title }}</text>
+  <div class="catalog" :style="{ backgroundColor: bgColor }">
+    <text class="text" :style="{ color: textColor }">{{ title }}</text>
   </div>
 </template>
 <style>
@@ -27,6 +27,14 @@ module.exports = {
   props: {
     title: {
       type: String
+    },
+    bgColor: {
+      type: String,
+      default: '#daf9ca'
+    },
+    textColor: {
+      type: String,
+      default: '#000000'
     }
   }
 }
