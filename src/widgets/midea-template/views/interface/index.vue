@@ -24,7 +24,7 @@
 <script>
 import { DofMinibar } from 'dolphin-weex-ui'
 import base from 'src/mixins/base'
-import TabBar from './component/tab-bar'
+import TabBar from './components/tab-bar'
 export default {
   components: {
     DofMinibar,

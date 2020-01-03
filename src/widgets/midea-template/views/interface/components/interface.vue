@@ -27,6 +27,12 @@ export default {
     return {
       bridge: [
         {
+          name: 'goTo',
+          label: '页面跳转',
+          text: '',
+          url: 'goTo.js'
+        },
+        {
           name: 'apiSpeechModule',
           label: '思必驰语音',
           text: '',
@@ -69,6 +75,7 @@ export default {
           text: '',
           url: 'getDeviceInfor.js'
         }
+ 
       ]
     }
   },
